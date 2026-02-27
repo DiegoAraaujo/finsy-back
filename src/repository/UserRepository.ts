@@ -3,7 +3,10 @@ import { prisma } from "../lib/prisma";
 
 class UserRepository {
   async create(user: User): Promise<User> {
-    const created = await prisma.user.create({ data: user.toPersistence() });
+    const created = await prisma.user.create({
+      data: user.toPersistence(),
+    });
+
     return new User(
       created.name,
       created.email,
@@ -13,13 +16,19 @@ class UserRepository {
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    const found = await prisma.user.findUnique({ where: { email } });
+    const found = await prisma.user.findFirst({
+      where: {
+        email,
+        deletedAt: null,
+      },
+    });
+
     if (!found) return null;
 
     return new User(found.name, found.email, found.passwordHash, found.id);
   }
 
-  async deleteById(id: number): Promise<User> {
+  async deleteById(id: number): Promise<User | null> {
     const deleted = await prisma.user.update({
       where: { id },
       data: { deletedAt: new Date() },
@@ -36,7 +45,7 @@ class UserRepository {
   async updateUser(
     userId: number,
     updates: { name?: string; email?: string },
-  ): Promise<User> {
+  ): Promise<User | null> {
     const updated = await prisma.user.update({
       where: { id: userId },
       data: updates,

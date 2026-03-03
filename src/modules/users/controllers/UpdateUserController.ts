@@ -2,6 +2,7 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import UpdateUserUseCase from "../use-cases/UpdateUserUseCase";
 import { userMapper } from "../mappers/userMapper";
 import { UpdateUserDTO } from "../dtos/UpdateUserDTO";
+import { updateUserSchema } from "../../../validators/userValidator";
 
 class UpdateUserController {
   private updateUserUseCase: UpdateUserUseCase;
@@ -15,12 +16,21 @@ class UpdateUserController {
     reply: FastifyReply,
   ) {
     const userId = request.userId;
-    const { name, email } = request.body;
+
+    const validation = updateUserSchema.safeParse(request.body);
+
+    if (!validation.success) {
+      return reply
+        .status(400)
+        .send({ message: validation.error.issues.map((e) => e.message) });
+    }
+
+    const { name, email } = validation.data;
 
     try {
       const newUser = await this.updateUserUseCase.execute(userId, name, email);
 
-      return reply.status(201).send(userMapper(newUser));
+      return reply.status(200).send(userMapper(newUser));
     } catch (error: any) {
       if ("errorType" in error) {
         switch (error.errorType) {

@@ -2,6 +2,7 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import { userMapper } from "../mappers/userMapper";
 import { LoginDTO } from "../dtos/LoginDTO";
 import LoginUseCase from "../use-cases/LoginUseCase";
+import { loginSchema } from "../../../validators/userValidator";
 
 class LoginController {
   private loginUseCase: LoginUseCase;
@@ -14,11 +15,22 @@ class LoginController {
     request: FastifyRequest<{ Body: LoginDTO }>,
     reply: FastifyReply,
   ) {
-    const { email, password } = request.body;
+    const validation = loginSchema.safeParse(request.body);
+
+    if (!validation.success) {
+      return reply
+        .status(400)
+        .send({ message: validation.error.issues.map((e) => e.message) });
+    }
+    const { email, password } = validation.data;
 
     try {
       const user = await this.loginUseCase.execute(email, password);
-      return reply.status(200).send(userMapper(user));
+      const accessToken = await reply.jwtSign(
+        { userId: user.getId() },
+        { expiresIn: "1d" },
+      );
+      return reply.status(200).send({ user: userMapper(user), accessToken });
     } catch (error: any) {
       if ("errorType" in error) {
         switch (error.errorType) {

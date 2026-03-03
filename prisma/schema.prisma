@@ -15,25 +15,25 @@ model User {
 
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  deletedAt     DateTime?
+  deletedAt    DateTime?
 
-  categories   Category[]
-  expenses     Expense[]
-  snapshots    MonthlyCategorySnapshot[]
-  salaries     SalaryHistory[]
+  months       Month[]
 }
 
-model SalaryHistory {
-  id            Int      @id @default(autoincrement())
-  userId        Int
-  amount        Decimal  @db.Decimal(12, 2)
-  effectiveFrom DateTime
+model Month {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  month     Int
+  year      Int
+  salary    Decimal? @db.Decimal(12, 2)
 
-  createdAt     DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt DateTime @default(now())
 
-  user          User     @relation(fields: [userId], references: [id])
+  user       User       @relation(fields: [userId], references: [id])
+  categories Category[]
+  expenses   Expense[]
 
+  @@unique([userId, month, year])
   @@index([userId])
 }
 
@@ -41,56 +41,37 @@ model Category {
   id            Int      @id @default(autoincrement())
   name          String
   spendingLimit Decimal  @db.Decimal(12, 2)
-  userId        Int
+
+  monthId       Int
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   deletedAt     DateTime?
 
-  user          User     @relation(fields: [userId], references: [id])
+  month         Month    @relation(fields: [monthId], references: [id])
   expenses      Expense[]
 
-  @@index([userId])
+  @@index([monthId])
 }
 
 model Expense {
   id            Int      @id @default(autoincrement())
-  userId        Int
-  categoryId    Int
-  snapshotId    Int?
-  amount         Decimal  @db.Decimal(12, 2)
+  amount        Decimal  @db.Decimal(12, 2)
   description   String?
   paymentMethod PaymentMethod
+
+  monthId       Int
+  categoryId    Int
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   deletedAt     DateTime?
 
-  user          User     @relation(fields: [userId], references: [id])
+  month         Month    @relation(fields: [monthId], references: [id])
   category      Category @relation(fields: [categoryId], references: [id])
-  snapshot      MonthlyCategorySnapshot? @relation(fields: [snapshotId], references: [id])
 
-  @@index([userId])
+  @@index([monthId])
   @@index([categoryId])
-  @@index([snapshotId])
-}
-
-model MonthlyCategorySnapshot {
-  id            Int      @id @default(autoincrement())
-  userId        Int
-  categoryId    Int
-
-  nameSnapshot  String
-  limitSnapshot Decimal  @db.Decimal(12, 2)
-
-  month         Int
-  year          Int
-
-  user          User     @relation(fields: [userId], references: [id])
-  expenses      Expense[]
-
-  @@unique([userId, categoryId, month, year])
-  @@index([userId, month, year])
 }
 
 enum PaymentMethod {

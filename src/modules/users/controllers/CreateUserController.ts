@@ -2,15 +2,28 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import CreateUserUseCase from "../use-cases/CreateUserUseCase";
 import { CreateUserDTO } from "../dtos/CreateUserDTO";
 import { userMapper } from "../mappers/userMapper";
+import { createUserSchema } from "../../../validators/userValidator";
 
 class CreateUserController {
-  constructor(private createUserUseCase: CreateUserUseCase) {}
+  private createUserUseCase: CreateUserUseCase;
+
+  constructor(createUserUseCase: CreateUserUseCase) {
+    this.createUserUseCase = createUserUseCase;
+  }
 
   async execute(
     request: FastifyRequest<{ Body: CreateUserDTO }>,
     reply: FastifyReply,
   ) {
-    const { name, email, password } = request.body;
+    const validation = createUserSchema.safeParse(request.body);
+
+    if (!validation.success) {
+      return reply
+        .status(400)
+        .send({ message: validation.error.issues.map((e) => e.message) });
+    }
+
+    const { name, email, password } = validation.data;
 
     try {
       const newUser = await this.createUserUseCase.execute(

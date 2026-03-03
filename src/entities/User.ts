@@ -12,6 +12,9 @@ class User {
   }
 
   getId() {
+    if (!this.id) {
+      throw new Error("User ID is not defined");
+    }
     return this.id;
   }
   getName() {

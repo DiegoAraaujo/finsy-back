@@ -2,7 +2,11 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import DeleteUserUseCase from "../use-cases/DeleteUserUseCase";
 
 class DeleteUserController {
-  constructor(private deleteUserUseCase: DeleteUserUseCase) {}
+  private deleteUserUseCase: DeleteUserUseCase;
+
+  constructor(deleteUserUseCase: DeleteUserUseCase) {
+    this.deleteUserUseCase = deleteUserUseCase;
+  }
 
   async execute(request: FastifyRequest, reply: FastifyReply) {
     const userId = request.userId;

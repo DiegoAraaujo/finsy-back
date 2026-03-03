@@ -2,9 +2,13 @@ import User from "../../../entities/User";
 import { IUserRepository } from "../../../interfaces/IUserRepository";
 
 class DeleteUserUseCase {
-  constructor(private userRepository: IUserRepository) {}
+  
+  private userRepository: IUserRepository;
 
-  async execute(userId: number): Promise<User> {
+  constructor(userRepository: IUserRepository) {
+    this.userRepository = userRepository;
+  }
+  async execute(userId: number): Promise<User | null> {
     const deletedUser = await this.userRepository.deleteById(userId);
     return deletedUser;
   }

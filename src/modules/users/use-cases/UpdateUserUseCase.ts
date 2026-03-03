@@ -3,8 +3,12 @@ import { IUserRepository } from "../../../interfaces/IUserRepository";
 import UseCaseError from "../../../interfaces/UseCaseError";
 
 class UpdateUserUseCase {
-  constructor(private userRepository: IUserRepository) {}
+  
+  private userRepository: IUserRepository;
 
+  constructor(userRepository: IUserRepository) {
+    this.userRepository = userRepository;
+  }
   async execute(userId: number, name?: string, email?: string): Promise<User> {
     if (!name && !email) {
       throw <UseCaseError>{

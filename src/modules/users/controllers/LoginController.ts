@@ -18,7 +18,11 @@ class LoginController {
 
     try {
       const user = await this.loginUseCase.execute(email, password);
-      return reply.status(200).send(userMapper(user));
+      const accessToken = await reply.jwtSign(
+        { userId: user.getId() },
+        { expiresIn: "1d" },
+      );
+      return reply.status(200).send({ user: userMapper(user), accessToken });
     } catch (error: any) {
       if ("errorType" in error) {
         switch (error.errorType) {

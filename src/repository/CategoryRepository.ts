@@ -94,7 +94,10 @@ class CategoryRepository implements ICategoryRepository {
   }
 
   async findCategoriesByMonthId(monthId: number) {
-    return await prisma.category.findMany({ where: { monthId } });
+    const categories = await prisma.category.findMany({ where: { monthId } });
+    return categories.map((c) => {
+      return new Category(c.monthId, c.name, c.spendingLimit.toNumber(), c.id);
+    });
   }
 }
 

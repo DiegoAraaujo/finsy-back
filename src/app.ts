@@ -3,6 +3,7 @@ import fastify from "fastify";
 import fastifyJwt from "@fastify/jwt";
 import usersRoutes from "./routes/user";
 import categoriesRoutes from "./routes/category";
+import MonthsRoutes from "./routes/month";
 
 const app = fastify();
 
@@ -12,5 +13,6 @@ app.register(fastifyJwt, {
 
 app.register(usersRoutes, { prefix: "/api/users" });
 app.register(categoriesRoutes, { prefix: "/api/categories" });
+app.register(MonthsRoutes, { prefix: "/api/months" });
 
 export default app;

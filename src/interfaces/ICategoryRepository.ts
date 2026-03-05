@@ -9,4 +9,5 @@ export interface ICategoryRepository {
   ): Promise<Category>;
   findCategoryByName(name: string, monthId: number): Promise<Category | null>;
   findCategoryById(categoryId: number): Promise<Category | null>;
+  findCategoriesByMonthId(monthId: number): Promise<Category[]>;
 }

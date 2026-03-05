@@ -9,6 +9,9 @@ import DeleteCategoryController from "./controllers/DeleteCategoryController";
 import UpdateCategoryUseCase from "./use-cases/UpdateCategoryUseCase";
 import UpdateCategoryController from "./controllers/UpdateCategoryController";
 
+import GetCategoriesUseCase from "./use-cases/GetCategoriesUseCase";
+import GetCategoriesController from "./controllers/GetCategoriesController";
+
 const categoryRepository = new CategoryRepository();
 
 const createCategoryUseCase = new CreateCategoryUseCase(categoryRepository);
@@ -24,4 +27,9 @@ export const deleteCategoryController = new DeleteCategoryController(
 const updateCategoryUseCase = new UpdateCategoryUseCase(categoryRepository);
 export const updateCategoryController = new UpdateCategoryController(
   updateCategoryUseCase,
+);
+
+const getCategoriesUseCase = new GetCategoriesUseCase(categoryRepository);
+export const getCategoriesController = new GetCategoriesController(
+  getCategoriesUseCase,
 );

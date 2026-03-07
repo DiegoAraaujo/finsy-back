@@ -1,21 +1,26 @@
+import { PaymentMethod } from "@prisma/client";
+
 class Expense {
   private id?: number;
   private monthId: number;
   private categoryId: number;
   private amount: number;
-  private description: string;
+  private paymentMethod: PaymentMethod;
+  private description: string | null;
 
   constructor(
     monthId: number,
     categoryId: number,
     amount: number,
-    description: string,
+    paymentMethod: PaymentMethod,
+    description: string | null,
     id?: number,
   ) {
     this.categoryId = categoryId;
     this.id = id;
     this.monthId = monthId;
     this.amount = amount;
+    this.paymentMethod = paymentMethod;
     this.description = description;
   }
 
@@ -37,12 +42,18 @@ class Expense {
   getDescription() {
     return this.description;
   }
+
+  getPaymentMethod() {
+    return this.paymentMethod;
+  }
+  
   toPersistence() {
     return {
       amount: this.amount,
       description: this.description,
       categoryId: this.categoryId,
       monthId: this.monthId,
+      paymentMethod: this.paymentMethod,
     };
   }
 }

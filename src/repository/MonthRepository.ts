@@ -12,6 +12,7 @@ class MonthRepository implements IMonthRepository {
       monthCreated.year,
       monthCreated.month,
       monthCreated.id,
+      monthCreated.salary.toNumber(),
     );
   }
 
@@ -32,6 +33,7 @@ class MonthRepository implements IMonthRepository {
           currentMonth.year,
           currentMonth.month,
           currentMonth.id,
+          currentMonth.salary.toNumber(),
         )
       : null;
   }
@@ -42,7 +44,9 @@ class MonthRepository implements IMonthRepository {
       orderBy: [{ year: "desc" }, { month: "desc" }],
     });
 
-    return months.map((m) => new Month(m.userId, m.year, m.month, m.id));
+    return months.map(
+      (m) => new Month(m.userId, m.year, m.month, m.id, m.salary.toNumber()),
+    );
   }
 
   async findLatestMonth(userId: number) {
@@ -52,7 +56,13 @@ class MonthRepository implements IMonthRepository {
     });
 
     return month
-      ? new Month(month.userId, month.year, month.month, month.id)
+      ? new Month(
+          month.userId,
+          month.year,
+          month.month,
+          month.id,
+          month.salary.toNumber(),
+        )
       : null;
   }
 

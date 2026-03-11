@@ -1,3 +1,4 @@
+import Category from "../../../entities/Category";
 import { ICategoryRepository } from "../../../interfaces/ICategoryRepository";
 import UseCaseError from "../../../interfaces/UseCaseError";
 
@@ -14,7 +15,7 @@ class UpdateCategoryUseCase {
       name?: string;
       spendingLimit?: number;
     },
-  ) {
+  ): Promise<Category> {
     if (!updates.name && !updates.spendingLimit) {
       throw <UseCaseError>{
         message: "There is no data to update",

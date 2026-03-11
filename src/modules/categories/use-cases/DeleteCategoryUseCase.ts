@@ -8,7 +8,7 @@ class DeleteCategoryUseCase {
     this.categoryRepository = categoryRepository;
   }
 
-  async execute(categoryId: number) {
+  async execute(categoryId: number): Promise<void> {
     const existingCategory =
       await this.categoryRepository.findCategoryById(categoryId);
 

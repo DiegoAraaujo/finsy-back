@@ -9,7 +9,11 @@ class CreateCategoryUseCase {
     this.categoryRepository = categoryRepository;
   }
 
-  async execute(monthId: number, name: string, spendingLimit: number) {
+  async execute(
+    monthId: number,
+    name: string,
+    spendingLimit: number,
+  ): Promise<Category> {
     const existingCategory = await this.categoryRepository.findCategoryByName(
       name,
       monthId,

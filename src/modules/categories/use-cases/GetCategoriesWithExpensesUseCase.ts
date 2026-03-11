@@ -1,4 +1,6 @@
+import Category from "../../../entities/Category";
 import { ICategoryRepository } from "../../../interfaces/ICategoryRepository";
+import { ICategoryWithTotalExpenses } from "../../../interfaces/ICategoryWithTotalExpenses";
 
 class GetCategoriesWithExpensesUseCase {
   private categoryRepository: ICategoryRepository;
@@ -7,7 +9,7 @@ class GetCategoriesWithExpensesUseCase {
     this.categoryRepository = categoryRepository;
   }
 
-  async execute(monthId: number) {
+  async execute(monthId: number): Promise<ICategoryWithTotalExpenses[]> {
     const categoriesWithTotalExpenses =
       await this.categoryRepository.findCategoriesWithTotalExpensesByMonth(
         monthId,

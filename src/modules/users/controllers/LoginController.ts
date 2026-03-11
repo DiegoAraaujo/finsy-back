@@ -26,10 +26,23 @@ class LoginController {
 
     try {
       const user = await this.loginUseCase.execute(email, password);
+
       const accessToken = await reply.jwtSign(
         { userId: user.getId() },
         { expiresIn: "5m" },
       );
+      const refreshToken = await reply.refreshJwtSign(
+        { userId: user.getId() },
+        { expiresIn: "7d" },
+      );
+
+      reply.setCookie("finsy_refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 60 * 60 * 24 * 7,
+      });
+
       return reply.status(200).send({ user: userMapper(user), accessToken });
     } catch (error: any) {
       if ("errorType" in error) {

@@ -1,0 +1,32 @@
+import { FastifyReply, FastifyRequest } from "fastify";
+import DeleteExpenseUseCase from "../use-cases/DeleteExpenseUseCase";
+
+class DeleteExpenseController {
+  private deleteExpenseUseCase: DeleteExpenseUseCase;
+
+  constructor(deleteExpenseUseCase: DeleteExpenseUseCase) {
+    this.deleteExpenseUseCase = deleteExpenseUseCase;
+  }
+
+  async execute(
+    request: FastifyRequest<{
+      Params: { expenseId: string };
+    }>,
+    reply: FastifyReply,
+  ) {
+    const expenseId = Number(request.params.expenseId);
+
+    if (isNaN(expenseId)) {
+      return reply.status(400).send({ message: "Invalid expenseId" });
+    }
+
+    try {
+      await this.deleteExpenseUseCase.execute(expenseId);
+      return reply.status(201).send({ success: true });
+    } catch (error) {
+      return reply.status(500).send({ message: "internal error" });
+    }
+  }
+}
+
+export default DeleteExpenseController;

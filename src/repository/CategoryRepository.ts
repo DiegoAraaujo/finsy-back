@@ -99,6 +99,37 @@ class CategoryRepository implements ICategoryRepository {
       return new Category(c.monthId, c.name, c.spendingLimit.toNumber(), c.id);
     });
   }
+
+  async findCategoriesWithTotalExpensesByMonth(monthId: number) {
+    const categories = await prisma.category.findMany({
+      where: { monthId },
+      select: {
+        id: true,
+        name: true,
+        monthId: true,
+        spendingLimit: true,
+        _count: {
+          select: { expenses: true },
+        },
+        expenses: {
+          select: {
+            amount: true,
+          },
+        },
+      },
+    });
+
+    return categories.map((category) => ({
+      id: category.id,
+      name: category.name,
+      monthId: category.monthId,
+      spendingLimit: category.spendingLimit.toNumber(),
+      totalExpenses: category.expenses.reduce(
+        (sum, expense) => sum + expense.amount.toNumber(),
+        0,
+      ),
+    }));
+  }
 }
 
 export default CategoryRepository;

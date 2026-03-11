@@ -36,11 +36,10 @@ class UpdateCategoryController {
     const { name, spendingLimit } = validation.data;
 
     try {
-      const category = await this.updateCategoryUseCase.execute(
-        categoryId,
+      const category = await this.updateCategoryUseCase.execute(categoryId, {
         name,
         spendingLimit,
-      );
+      });
       return reply.status(201).send(categoryMapper(category));
     } catch (error: any) {
       if ("errorType" in error) {

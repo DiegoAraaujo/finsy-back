@@ -8,8 +8,14 @@ class UpdateCategoryUseCase {
     this.categoryRepository = categoryRepository;
   }
 
-  async execute(categoryId: number, name?: string, spendingLimit?: number) {
-    if (!name && !spendingLimit) {
+  async execute(
+    categoryId: number,
+    updates: {
+      name?: string;
+      spendingLimit?: number;
+    },
+  ) {
+    if (!updates.name && !updates.spendingLimit) {
       throw <UseCaseError>{
         message: "There is no data to update",
         errorType: "VALIDATION_ERROR",
@@ -27,8 +33,9 @@ class UpdateCategoryUseCase {
     }
     const dataToUpdate: Partial<{ name?: string; spendingLimit?: number }> = {};
 
-    if (name) dataToUpdate.name = name;
-    if (spendingLimit) dataToUpdate.spendingLimit = spendingLimit;
+    if (updates.name) dataToUpdate.name = updates.name;
+    if (updates.spendingLimit)
+      dataToUpdate.spendingLimit = updates.spendingLimit;
 
     const updatedCategory = await this.categoryRepository.updateCategory(
       categoryId,

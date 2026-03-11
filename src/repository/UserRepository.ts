@@ -42,18 +42,11 @@ class UserRepository implements IUserRepository {
     return new User(found.name, found.email, found.passwordHash, found.id);
   }
 
-  async deleteById(id: number): Promise<User | null> {
-    const deleted = await prisma.user.update({
+  async deleteById(id: number): Promise<void> {
+    await prisma.user.update({
       where: { id },
       data: { deletedAt: new Date() },
     });
-
-    return new User(
-      deleted.name,
-      deleted.email,
-      deleted.passwordHash,
-      deleted.id,
-    );
   }
 
   async updateUser(

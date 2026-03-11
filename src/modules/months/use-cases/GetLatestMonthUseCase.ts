@@ -1,3 +1,4 @@
+import Month from "../../../entities/Month";
 import { IMonthRepository } from "../../../interfaces/IMonthRepository";
 
 class GetLatestMonthUseCase {
@@ -7,7 +8,7 @@ class GetLatestMonthUseCase {
     this.monthRepository = monthRepository;
   }
 
-  async execute(userId: number) {
+  async execute(userId: number): Promise<Month | null> {
     const lastestMonth = await this.monthRepository.findLatestMonth(userId);
     return lastestMonth;
   }

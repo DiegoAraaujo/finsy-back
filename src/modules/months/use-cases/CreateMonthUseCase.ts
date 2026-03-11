@@ -9,7 +9,7 @@ class CreateMonthUseCase {
     this.monthRepository = monthRepository;
   }
 
-  async execute(userId: number, salary: number) {
+  async execute(userId: number, salary: number): Promise<Month> {
     const today = new Date();
 
     const month = today.getMonth() + 1;

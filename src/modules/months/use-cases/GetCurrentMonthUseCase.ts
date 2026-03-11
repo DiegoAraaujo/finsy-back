@@ -1,3 +1,4 @@
+import Month from "../../../entities/Month";
 import { IMonthRepository } from "../../../interfaces/IMonthRepository";
 
 class GetCurrentMonthUseCase {
@@ -7,7 +8,7 @@ class GetCurrentMonthUseCase {
     this.monthRepository = monthRepository;
   }
 
-  async execute(userId: number) {
+  async execute(userId: number): Promise<Month | null> {
     const today = new Date();
 
     const month = today.getMonth() + 1;

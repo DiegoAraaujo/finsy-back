@@ -1,3 +1,4 @@
+import Month from "../../../entities/Month";
 import { IMonthRepository } from "../../../interfaces/IMonthRepository";
 
 class GetAllMonthsUseCase {
@@ -7,7 +8,7 @@ class GetAllMonthsUseCase {
     this.monthRepository = monthRepository;
   }
 
-  async execute(userId: number) {
+  async execute(userId: number): Promise<Month[]> {
     const months = await this.monthRepository.findAllMonths(userId);
     return months;
   }

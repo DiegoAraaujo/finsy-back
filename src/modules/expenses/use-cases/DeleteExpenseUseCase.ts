@@ -7,7 +7,7 @@ class DeleteExpenseUseCase {
     this.expenseRepository = expenseRepository;
   }
 
-  async execute(expenseId: number) {
+  async execute(expenseId: number): Promise<void> {
     return await this.expenseRepository.deleteExpense(expenseId);
   }
 }

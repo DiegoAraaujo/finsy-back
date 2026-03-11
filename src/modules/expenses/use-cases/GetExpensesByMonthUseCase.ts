@@ -1,3 +1,4 @@
+import Expense from "../../../entities/Expense";
 import { IExpenseRepository } from "../../../interfaces/IExpenseRepository";
 
 class GetExpensesByMonthUseCase {
@@ -7,7 +8,7 @@ class GetExpensesByMonthUseCase {
     this.expenseRepository = expenseRepository;
   }
 
-  async execute(monthId: number) {
+  async execute(monthId: number): Promise<Expense[]> {
     const expenses =
       await this.expenseRepository.findExpensesByMonthId(monthId);
     return expenses;

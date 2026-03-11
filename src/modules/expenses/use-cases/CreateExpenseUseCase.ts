@@ -15,7 +15,7 @@ class CreateExpenseUseCase {
     amount: number,
     paymentMethod: PaymentMethod,
     description: string | null,
-  ) {
+  ): Promise<Expense> {
     const expenseEntity = new Expense(
       monthId,
       categoryId,

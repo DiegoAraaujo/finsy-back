@@ -28,7 +28,7 @@ class LoginController {
       const user = await this.loginUseCase.execute(email, password);
       const accessToken = await reply.jwtSign(
         { userId: user.getId() },
-        { expiresIn: "1d" },
+        { expiresIn: "5m" },
       );
       return reply.status(200).send({ user: userMapper(user), accessToken });
     } catch (error: any) {

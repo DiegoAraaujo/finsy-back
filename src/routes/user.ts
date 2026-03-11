@@ -4,6 +4,9 @@ import {
   deleteUserController,
   updateUserController,
   loginController,
+  autoLoginController,
+  logoutController,
+  refreshTokenController,
 } from "../modules/users";
 import { CreateUserDTO } from "../modules/users/dtos/CreateUserDTO";
 import { UpdateUserDTO } from "../modules/users/dtos/UpdateUserDTO";
@@ -19,6 +22,16 @@ const usersRoutes = async (router: FastifyInstance) => {
     loginController.execute(req, reply),
   );
 
+  router.post("/logout", { preHandler: [auth] }, (req, reply) =>
+    logoutController.execute(req, reply),
+  );
+
+  router.post("/refresh", (req, reply) =>
+    refreshTokenController.execute(req, reply),
+  );
+
+  router.get("/me", (req, reply) => autoLoginController.execute(req, reply));
+  
   router.put<{ Body: UpdateUserDTO }>(
     "/",
     { preHandler: [auth] },

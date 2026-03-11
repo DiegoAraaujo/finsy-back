@@ -3,14 +3,16 @@ import { IUserRepository } from "../../../interfaces/IUserRepository";
 import UseCaseError from "../../../interfaces/UseCaseError";
 
 class UpdateUserUseCase {
-  
   private userRepository: IUserRepository;
 
   constructor(userRepository: IUserRepository) {
     this.userRepository = userRepository;
   }
-  async execute(userId: number, name?: string, email?: string): Promise<User> {
-    if (!name && !email) {
+  async execute(
+    userId: number,
+    updates: { name?: string; email?: string },
+  ): Promise<User> {
+    if (!updates.name && !updates.email) {
       throw <UseCaseError>{
         message: "There is no data to update",
         errorType: "VALIDATION_ERROR",
@@ -28,8 +30,8 @@ class UpdateUserUseCase {
 
     const dataToUpdate: Partial<{ name?: string; email?: string }> = {};
 
-    if (name) dataToUpdate.name = name;
-    if (email) dataToUpdate.email = email;
+    if (updates.name) dataToUpdate.name = updates.name;
+    if (updates.email) dataToUpdate.email = updates.email;
 
     const updatedUser = await this.userRepository.updateUser(
       userId,

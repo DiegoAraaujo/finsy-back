@@ -28,7 +28,10 @@ class UpdateUserController {
     const { name, email } = validation.data;
 
     try {
-      const newUser = await this.updateUserUseCase.execute(userId, name, email);
+      const newUser = await this.updateUserUseCase.execute(userId, {
+        name,
+        email,
+      });
 
       return reply.status(200).send(userMapper(newUser));
     } catch (error: any) {

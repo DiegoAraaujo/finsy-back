@@ -11,10 +11,15 @@ import GetCurrentMonthController from "./controllers/GetCurrentMonthController";
 
 import GetLatestMonthUseCase from "./use-cases/GetLatestMonthUseCase";
 import GetLatestMonthController from "./controllers/GetLatestMonthController";
+import CategoryRepository from "../../repository/CategoryRepository";
 
 const monthRepository = new MonthRepository();
+const categoryRepository = new CategoryRepository();
 
-const createMonthUseCase = new CreateMonthUseCase(monthRepository);
+const createMonthUseCase = new CreateMonthUseCase(
+  monthRepository,
+  categoryRepository,
+);
 export const createMonthController = new CreateMonthController(
   createMonthUseCase,
 );

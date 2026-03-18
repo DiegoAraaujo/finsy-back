@@ -31,7 +31,7 @@ class CreateCategoryUseCase {
 
     if (!currentMonth) {
       throw <UseCaseError>{
-        message: "This month does not exist.",
+        message: "You haven't created a month yet. Cannot add a category.",
         errorType: "MONTH_NOT_FOUND",
       };
     }

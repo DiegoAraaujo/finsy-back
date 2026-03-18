@@ -9,3 +9,5 @@ export const updateCategorySchema = z.object({
   name: z.string().trim().min(1).optional(),
   spendingLimit: z.number().positive().optional(),
 });
+
+export const createCategoriesSchema = z.array(createCategorySchema);

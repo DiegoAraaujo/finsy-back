@@ -19,6 +19,7 @@ class UpdateCategoryController {
     }>,
     reply: FastifyReply,
   ) {
+    const userId = request.userId;
     const categoryId = Number(request.params.categoryId);
 
     if (isNaN(categoryId)) {
@@ -36,23 +37,31 @@ class UpdateCategoryController {
     const { name, spendingLimit } = validation.data;
 
     try {
-      const category = await this.updateCategoryUseCase.execute(categoryId, {
-        name,
-        spendingLimit,
-      });
-      return reply.status(201).send(categoryMapper(category));
+      const category = await this.updateCategoryUseCase.execute(
+        userId,
+        categoryId,
+        {
+          name,
+          spendingLimit,
+        },
+      );
+      return reply.status(200).send(categoryMapper(category));
     } catch (error: any) {
       if ("errorType" in error) {
-        if (error.errorType === "CATEGORY_DOES_NOT_EXISTS") {
-          return reply.status(404).send({
-            message: error.message,
-            details: error.details,
-          });
-        } else if (error.errorType === "VALIDATION_ERROR") {
-          return reply.status(400).send({
-            message: error.message,
-            details: error.details,
-          });
+        switch (error.errorType) {
+          case "CATEGORY_DOES_NOT_EXISTS":
+            return reply.status(404).send({
+              message: error.message,
+              details: error.details,
+            });
+
+          case "VALIDATION_ERROR":
+          case "MONTH_NOT_FOUND":
+          case "CATEGORY_ALREADY_EXISTS":
+            return reply.status(400).send({
+              message: error.message,
+              details: error.details,
+            });
         }
       }
 

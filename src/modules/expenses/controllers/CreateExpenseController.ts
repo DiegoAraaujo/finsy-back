@@ -49,7 +49,16 @@ class CreateExpenseController {
       );
 
       return reply.status(201).send({ expense });
-    } catch (error) {
+    } catch (error: any) {
+      if ("errorType" in error) {
+        if (error.errorType === "MONTH_NOT_FOUND") {
+          return reply.status(400).send({
+            message: error.message,
+            details: error.details,
+          });
+        }
+      }
+
       return reply.status(500).send({ message: "internal error" });
     }
   }

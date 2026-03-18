@@ -1,4 +1,5 @@
 import ExpenseRepository from "../../repository/ExpensesRepository";
+import MonthRepository from "../../repository/MonthRepository";
 import CreateExpenseController from "./controllers/CreateExpenseController";
 import DeleteExpenseController from "./controllers/DeleteExpenseController";
 import GetExpensesByCategoryController from "./controllers/GetExpensesByCategoryController";
@@ -11,8 +12,12 @@ import GetExpensesByMonthUseCase from "./use-cases/GetExpensesByMonthUseCase";
 import UpdateExpenseUseCase from "./use-cases/UpdateExpenseUseCase";
 
 const expenseRepository = new ExpenseRepository();
+const monthRepository = new MonthRepository();
 
-const createExpenseUseCase = new CreateExpenseUseCase(expenseRepository);
+const createExpenseUseCase = new CreateExpenseUseCase(
+  expenseRepository,
+  monthRepository,
+);
 export const createExpenseController = new CreateExpenseController(
   createExpenseUseCase,
 );

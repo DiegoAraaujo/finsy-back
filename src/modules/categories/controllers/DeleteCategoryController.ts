@@ -14,7 +14,6 @@ class DeleteCategoryController {
     }>,
     reply: FastifyReply,
   ) {
-    console.log("ola mundo")
     const categoryId = Number(request.params.categoryId);
 
     if (isNaN(categoryId)) {

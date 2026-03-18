@@ -21,7 +21,7 @@ class Month {
 
   getId() {
     if (!this.id) {
-      throw new Error("Category ID is not defined");
+      throw new Error("ID is not defined");
     }
     return this.id;
   }

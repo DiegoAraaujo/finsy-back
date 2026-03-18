@@ -37,11 +37,15 @@ class createCategoryController {
       return reply.status(201).send(categoryMapper(category));
     } catch (error: any) {
       if ("errorType" in error) {
-        if (error.errorType === "CATEGORY_ALREADY_EXISTS") {
-          return reply.status(400).send({
-            message: error.message,
-            details: error.details,
-          });
+        switch (error.errorType) {
+          case "CATEGORY_ALREADY_EXISTS":
+          case "MONTH_NOT_FOUND":
+            return reply.status(400).send({
+              message: error.message,
+              details: error.details,
+            });
+          default:
+            return reply.status(500).send({ message: "Internal server error" });
         }
       }
 

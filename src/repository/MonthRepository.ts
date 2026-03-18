@@ -11,8 +11,8 @@ class MonthRepository implements IMonthRepository {
       monthCreated.userId,
       monthCreated.year,
       monthCreated.month,
-      monthCreated.id,
       monthCreated.salary.toNumber(),
+      monthCreated.id,
     );
   }
 
@@ -32,8 +32,8 @@ class MonthRepository implements IMonthRepository {
           currentMonth.userId,
           currentMonth.year,
           currentMonth.month,
-          currentMonth.id,
           currentMonth.salary.toNumber(),
+          currentMonth.id,
         )
       : null;
   }
@@ -45,7 +45,7 @@ class MonthRepository implements IMonthRepository {
     });
 
     return months.map(
-      (m) => new Month(m.userId, m.year, m.month, m.id, m.salary.toNumber()),
+      (m) => new Month(m.userId, m.year, m.month, m.salary.toNumber(), m.id),
     );
   }
 
@@ -60,13 +60,13 @@ class MonthRepository implements IMonthRepository {
           month.userId,
           month.year,
           month.month,
-          month.id,
           month.salary.toNumber(),
+          month.id,
         )
       : null;
   }
 
-  async existsMonth(month: number, year: number, userId: number) {
+  async existsMonth(userId: number, month: number, year: number) {
     const existingMonth = await prisma.month.findUnique({
       where: {
         userId_month_year: {

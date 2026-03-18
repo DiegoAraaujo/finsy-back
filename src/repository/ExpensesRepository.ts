@@ -78,6 +78,23 @@ class ExpenseRepository implements IExpenseRepository {
     );
   }
 
+  async findExpenseById(expenseId: number) {
+    const expense = await prisma.expense.findFirst({
+      where: { id: expenseId, deletedAt: null },
+    });
+
+    return expense
+      ? new Expense(
+          expense.monthId,
+          expense.categoryId,
+          expense.amount.toNumber(),
+          expense.paymentMethod,
+          expense.description,
+          expense.id,
+        )
+      : null;
+  }
+
   async deleteExpense(expenseId: number) {
     await prisma.expense.updateMany({
       where: { id: expenseId, deletedAt: null },

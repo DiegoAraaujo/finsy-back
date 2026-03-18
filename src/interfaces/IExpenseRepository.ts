@@ -12,6 +12,7 @@ export interface IExpenseRepository {
     },
   ): Promise<Expense>;
   findExpensesByMonthId(monthId: number): Promise<Expense[]>;
+  findExpenseById(expenseId: number): Promise<Expense | null>;
   findExpensesByCategoryId(categoryId: number): Promise<Expense[]>;
   deleteExpense(ExpenseId: number): Promise<void>;
 }

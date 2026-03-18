@@ -3,6 +3,7 @@ import { ICategoryWithTotalExpenses } from "./ICategoryWithTotalExpenses";
 
 export interface ICategoryRepository {
   createCategory(category: Category): Promise<Category>;
+  createManyCategories(categories: Category[]): Promise<Category[]>;
   deleteCategory(categoryId: number): Promise<void>;
   updateCategory(
     categoryId: number,

@@ -7,9 +7,10 @@ import {
   getCurrentMonthController,
   getLatestMonthController,
 } from "../modules/months";
+import { CreateCategoryDTO } from "../modules/categories/dtos/CreateCategoryDTO";
 
 const MonthsRoutes = async (router: FastifyInstance) => {
-  router.post<{ Body: { salary: number } }>(
+  router.post<{ Body: { salary: number; categories: CreateCategoryDTO[] } }>(
     "/",
     { preHandler: [auth] },
     (req, reply) => createMonthController.execute(req, reply),

@@ -1,13 +1,16 @@
 import "dotenv/config";
 import fastify from "fastify";
 import fastifyJwt from "@fastify/jwt";
+import fastifyCors from "@fastify/cors";
 import fastifyCookie from "@fastify/cookie";
+import swagger from "@fastify/swagger";
+import swaggerUI from "@fastify/swagger-ui";
+
 import usersRoutes from "./routes/user";
 import categoriesRoutes from "./routes/category";
 import MonthsRoutes from "./routes/month";
 import expensesRoutes from "./routes/expense";
-import swagger from "@fastify/swagger";
-import swaggerUI from "@fastify/swagger-ui";
+
 const app = fastify();
 
 (async () => {
@@ -25,6 +28,11 @@ const app = fastify();
     routePrefix: "/docs",
   });
 })();
+
+app.register(fastifyCors, {
+  origin: "http://localhost:5173",
+  credentials: true,
+});
 
 app.register(fastifyJwt, {
   secret: process.env.JWT_ACCESS_SECRET as string,

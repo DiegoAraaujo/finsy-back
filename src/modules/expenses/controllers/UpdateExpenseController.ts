@@ -1,11 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PaymentMethod } from "@prisma/client";
-import CreateExpenseUseCase from "../use-cases/CreateExpenseUseCase";
-import { CreateExpenseDTO } from "../dtos/CreateExpenseDTO";
-import {
-  createExpenseSchema,
-  updateExpenseSchema,
-} from "../../../validators/ExpenseValidator";
+import { updateExpenseSchema } from "../../../validators/ExpenseValidator";
 import UpdateExpenseUseCase from "../use-cases/UpdateExpenseUseCase";
 import { updateExpenseDTO } from "../dtos/UpdateExpenseDTO";
 

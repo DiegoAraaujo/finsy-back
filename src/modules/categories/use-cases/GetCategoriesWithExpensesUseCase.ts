@@ -1,4 +1,3 @@
-import Category from "../../../entities/Category";
 import { ICategoryRepository } from "../../../interfaces/ICategoryRepository";
 import { ICategoryWithTotalExpenses } from "../../../interfaces/ICategoryWithTotalExpenses";
 

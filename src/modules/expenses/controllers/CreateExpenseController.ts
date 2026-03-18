@@ -14,17 +14,17 @@ class CreateExpenseController {
   async execute(
     request: FastifyRequest<{
       Body: CreateExpenseDTO;
-      Params: { categoryId: string; monthId: string };
+      Params: { categoryId: string; };
     }>,
     reply: FastifyReply,
   ) {
+    const userId = request.userId
     const categoryId = Number(request.params.categoryId);
-    const monthId = Number(request.params.monthId);
 
-    if (isNaN(categoryId) || isNaN(monthId)) {
+    if (isNaN(categoryId)) {
       return reply
         .status(400)
-        .send({ message: "Invalid categoryId or monthId" });
+        .send({ message: "Invalid categoryId" });
     }
     const { amount, paymentMethod, description } = request.body;
 
@@ -41,7 +41,7 @@ class CreateExpenseController {
     }
     try {
       const expense = await this.createExpenseUseCase.execute(
-        monthId,
+        userId,
         categoryId,
         validation.data.amount,
         paymentMethod,

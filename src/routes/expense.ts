@@ -24,8 +24,8 @@ const expensesRoutes = async (router: FastifyInstance) => {
   );
   router.post<{
     Body: CreateExpenseDTO;
-    Params: { monthId: string; categoryId: string };
-  }>("/:monthId/:categoryId", { preHandler: [auth] }, (req, reply) =>
+    Params: { categoryId: string };
+  }>("/:categoryId", { preHandler: [auth] }, (req, reply) =>
     createExpenseController.execute(req, reply),
   );
   router.put<{

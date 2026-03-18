@@ -29,7 +29,7 @@ class GetCategoriesWithExpensesController {
         .status(200)
         .send({ categories: categoriesWithTotalExpenses });
     } catch (error) {
-      return reply.status(500).send({ message: "Internal error" });
+      return reply.status(500).send({ message: "Internal server error" });
     }
   }
 }

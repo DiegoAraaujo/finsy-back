@@ -51,8 +51,18 @@ class UpdateExpenseController {
       );
 
       return reply.status(201).send({ expense });
-    } catch (error) {
-      return reply.status(500).send({ message: "internal error" });
+    } catch (error: any) {
+      if ("errorType" in error) {
+        switch (error.errorType) {
+          case "VALIDATION_ERROR":
+          case "EXPENSE_NOT_FOUND":
+            return reply.status(400).send({
+              message: error.message,
+              details: error.details,
+            });
+        }
+      }
+      return reply.status(500).send({ message: "internal server error" });
     }
   }
 }

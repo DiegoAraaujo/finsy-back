@@ -25,7 +25,7 @@ class GetExpensesByCategoryController {
         await this.getExpensesByCategoryUseCase.execute(categoryId);
       return reply.status(201).send({ expenses });
     } catch (error) {
-      return reply.status(500).send({ message: "internal error" });
+      return reply.status(500).send({ message: "internal server error" });
     }
   }
 }

@@ -25,6 +25,16 @@ class UpdateExpenseUseCase {
       };
     }
 
+    const existingExpense =
+      await this.expenseRepository.findExpenseById(expenseId);
+      
+    if (!existingExpense) {
+      throw <UseCaseError>{
+        message: "This expense does not exist.",
+        errorType: "EXPENSE_NOT_FOUND",
+      };
+    }
+
     const dataToUpdate: Partial<{
       amount?: number;
       paymentMethod?: PaymentMethod;

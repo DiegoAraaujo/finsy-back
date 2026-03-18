@@ -15,6 +15,20 @@ class CategoryRepository implements ICategoryRepository {
     );
   }
 
+  async createManyCategories(categories: Category[]): Promise<Category[]> {
+    const createdCategories = await prisma.$transaction(
+      categories.map((category) =>
+        prisma.category.create({
+          data: category.toPersistence(),
+        }),
+      ),
+    );
+
+    return createdCategories.map(
+      (c) => new Category(c.monthId, c.name, c.spendingLimit.toNumber(), c.id),
+    );
+  }
+
   async updateCategory(
     categoryId: number,
     updates: {

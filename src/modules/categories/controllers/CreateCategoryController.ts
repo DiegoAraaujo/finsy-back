@@ -14,16 +14,10 @@ class createCategoryController {
   async execute(
     request: FastifyRequest<{
       Body: CreateCategoryDTO;
-      Params: { monthId: string };
     }>,
     reply: FastifyReply,
   ) {
-    const monthId = Number(request.params.monthId);
-
-    if (isNaN(monthId)) {
-      return reply.status(400).send({ message: "Invalid monthId" });
-    }
-
+    const userId = request.userId;
     const validation = createCategorySchema.safeParse(request.body);
 
     if (!validation.success) {
@@ -36,7 +30,7 @@ class createCategoryController {
 
     try {
       const category = await this.createCategoryUseCase.execute(
-        monthId,
+        userId,
         name,
         spendingLimit,
       );

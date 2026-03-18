@@ -33,7 +33,7 @@ class DeleteExpenseController {
         }
       }
 
-      return reply.status(500).send({ message: "internal error" });
+      return reply.status(500).send({ message: "internal server error" });
     }
   }
 }

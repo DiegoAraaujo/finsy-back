@@ -21,10 +21,6 @@ class CreateMonthController {
     const { salary } = request.body;
     const userId = Number(request.userId);
 
-    if (isNaN(userId)) {
-      return reply.status(400).send({ message: "Invalid userId" });
-    }
-
     if (salary <= 0) {
       return reply.status(400).send();
     }
@@ -58,8 +54,7 @@ class CreateMonthController {
           });
         }
       }
-      console.log(error)
-      reply.status(500).send({ message: "Internal error" });
+      reply.status(500).send({ message: "Internal server error" });
     }
   }
 }

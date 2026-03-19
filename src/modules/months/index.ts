@@ -29,12 +29,18 @@ export const getAllMonthsController = new GetAllMonthsController(
   getAllMonthsUseCase,
 );
 
-const getCurrentMonthUseCase = new GetCurrentMonthUseCase(monthRepository);
+const getCurrentMonthUseCase = new GetCurrentMonthUseCase(
+  monthRepository,
+  categoryRepository,
+);
 export const getCurrentMonthController = new GetCurrentMonthController(
   getCurrentMonthUseCase,
 );
 
-const getLatestMonthUseCase = new GetLatestMonthUseCase(monthRepository);
+const getLatestMonthUseCase = new GetLatestMonthUseCase(
+  monthRepository,
+  categoryRepository,
+);
 export const getLatestMonthController = new GetLatestMonthController(
   getLatestMonthUseCase,
 );

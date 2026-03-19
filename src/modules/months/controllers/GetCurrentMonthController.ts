@@ -13,11 +13,18 @@ class GetCurrentMonthController {
     const userId = Number(request.userId);
 
     try {
-      const month = await this.getCurrentMonthUseCase.execute(userId);
-      return reply
-        .status(200)
-        .send({ month: month ? monthMapper(month) : null });
-    } catch (error) {
+      const { month, categories } =
+        await this.getCurrentMonthUseCase.execute(userId);
+      return reply.status(200).send({ month: monthMapper(month), categories });
+    } catch (error: any) {
+      if ("errorType" in error) {
+        if (error.errorType === "MONTH_DOES_NOT_EXISTS") {
+          return reply.status(404).send({
+            message: error.message,
+            details: error.details,
+          });
+        }
+      }
       return reply.status(500).send({ message: "Internal server error" });
     }
   }

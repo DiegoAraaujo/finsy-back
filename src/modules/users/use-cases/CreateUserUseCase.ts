@@ -11,13 +11,14 @@ class CreateUserUseCase {
   }
 
   async execute(name: string, email: string, password: string): Promise<User> {
+
     const existingUser = await this.userRepository.findByEmail(email);
+    
     if (existingUser) {
-      const error: UseCaseError = {
+      throw <UseCaseError>{
         message: "Email already registered",
         errorType: "EMAIL_DUPLICATED",
       };
-      throw error;
     }
 
     const hashedPassword = await generateHash(password);

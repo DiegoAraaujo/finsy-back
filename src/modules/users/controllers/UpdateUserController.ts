@@ -43,6 +43,11 @@ class UpdateUserController {
               details: error.details,
             });
 
+          case "NOT_FOUND":
+            return reply.status(404).send({
+              message: error.message,
+            });
+
           case "EMAIL_DUPLICATED":
             return reply.status(409).send({
               message: error.message,

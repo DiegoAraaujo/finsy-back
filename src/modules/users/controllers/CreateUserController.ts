@@ -34,12 +34,7 @@ class CreateUserController {
       return reply.status(201).send(userMapper(newUser));
     } catch (error: any) {
       if ("errorType" in error) {
-        if (error.errorType === "VALIDATION_ERROR") {
-          return reply.status(400).send({
-            message: error.message,
-            details: error.details,
-          });
-        } else if (error.errorType === "EMAIL_DUPLICATED") {
+        if (error.errorType === "EMAIL_DUPLICATED") {
           return reply.status(409).send({ message: error.message });
         }
       }

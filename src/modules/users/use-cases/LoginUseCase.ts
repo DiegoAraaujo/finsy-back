@@ -12,19 +12,7 @@ class LoginUseCase {
   }
 
   async execute(email: string, password: string): Promise<User> {
-    const validation = loginSchema.safeParse({ email, password });
-
-    if (!validation.success) {
-      throw <UseCaseError>{
-        message: "Validation error",
-        errorType: "VALIDATION_ERROR",
-        details: validation.error.issues.map((e) => e.message),
-      };
-    }
-
-    const data = validation.data;
-
-    const user = await this.userRepository.findByEmail(data.email);
+    const user = await this.userRepository.findByEmail(email);
     if (!user) {
       throw <UseCaseError>{
         message: "Invalid credentials",
@@ -32,10 +20,7 @@ class LoginUseCase {
       };
     }
 
-    const isPasswordValid = await compareHash(
-      data.password,
-      user.getPasswordHash(),
-    );
+    const isPasswordValid = await compareHash(password, user.getPasswordHash());
 
     if (!isPasswordValid) {
       throw <UseCaseError>{

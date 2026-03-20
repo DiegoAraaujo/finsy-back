@@ -47,12 +47,6 @@ class LoginController {
     } catch (error: any) {
       if ("errorType" in error) {
         switch (error.errorType) {
-          case "VALIDATION_ERROR":
-            return reply.status(400).send({
-              message: error.message,
-              details: error.details,
-            });
-
           case "AUTH_ERROR":
             return reply.status(401).send({
               message: error.message,

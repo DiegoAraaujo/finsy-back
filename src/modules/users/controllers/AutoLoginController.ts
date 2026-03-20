@@ -16,10 +16,10 @@ class AutoLoginController {
       if (!user) {
         return reply.status(404).send({ message: "User not found" });
       }
-      
+
       const accessToken = await reply.jwtSign({ userId }, { expiresIn: "5m" });
 
-      return reply.send({ user: userMapper(user), accessToken });
+      return reply.status(200).send({ user: userMapper(user), accessToken });
     } catch (err) {
       reply.clearCookie("finsy_refreshToken");
       return reply.status(401).send({ message: "Not authenticated" });

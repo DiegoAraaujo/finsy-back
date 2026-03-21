@@ -3,17 +3,31 @@ import { IMonthRepository } from "../interfaces/IMonthRepository";
 import { prisma } from "../lib/prisma";
 
 class MonthRepository implements IMonthRepository {
-  async createMonth(month: Month) {
-    const monthCreated = await prisma.month.create({
-      data: month.toPersistence(),
+  async createMonthWithCategories(
+    month: Month,
+    categories: { name: string; spendingLimit: number }[],
+  ) {
+    return await prisma.$transaction(async (tx) => {
+      const monthCreated = await tx.month.create({
+        data: month.toPersistence(),
+      });
+
+      await tx.category.createMany({
+        data: categories.map((category) => ({
+          name: category.name,
+          spendingLimit: category.spendingLimit,
+          monthId: monthCreated.id,
+        })),
+      });
+
+      return new Month(
+        monthCreated.userId,
+        monthCreated.year,
+        monthCreated.month,
+        monthCreated.salary.toNumber(),
+        monthCreated.id,
+      );
     });
-    return new Month(
-      monthCreated.userId,
-      monthCreated.year,
-      monthCreated.month,
-      monthCreated.salary.toNumber(),
-      monthCreated.id,
-    );
   }
 
   async findCurrentMonth(userId: number, month: number, year: number) {

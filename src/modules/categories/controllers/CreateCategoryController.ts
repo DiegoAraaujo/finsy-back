@@ -40,12 +40,11 @@ class createCategoryController {
         switch (error.errorType) {
           case "CATEGORY_ALREADY_EXISTS":
           case "MONTH_NOT_FOUND":
+          case "MONTHLY_LIMIT_EXCEEDED":
             return reply.status(400).send({
               message: error.message,
               details: error.details,
             });
-          default:
-            return reply.status(500).send({ message: "Internal server error" });
         }
       }
 

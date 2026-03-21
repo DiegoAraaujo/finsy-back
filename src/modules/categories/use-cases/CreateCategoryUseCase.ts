@@ -48,6 +48,25 @@ class CreateCategoryUseCase {
       };
     }
 
+    const existingCategories =
+      await this.categoryRepository.findCategoriesByMonthId(
+        currentMonth.getId(),
+      );
+    const totalAllocatedLimit = existingCategories.reduce(
+      (acc, c) => c.getSpendingLimit() + acc,
+      0,
+    );
+
+    const newTotalAllocatedLimit = totalAllocatedLimit + spendingLimit;
+    const monthlySalary = currentMonth.getSalary();
+
+    if (newTotalAllocatedLimit > monthlySalary) {
+      throw <UseCaseError>{
+        message: "Total category limits exceed the monthly salary",
+        errorType: "MONTHLY_LIMIT_EXCEEDED",
+      };
+    }
+
     const category = new Category(currentMonth.getId(), name, spendingLimit);
     const newCategory = await this.categoryRepository.createCategory(category);
 

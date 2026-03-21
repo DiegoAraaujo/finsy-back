@@ -1,4 +1,3 @@
-import Category from "../../../entities/Category";
 import Month from "../../../entities/Month";
 import { ICategoryRepository } from "../../../interfaces/ICategoryRepository";
 import { IMonthRepository } from "../../../interfaces/IMonthRepository";
@@ -20,7 +19,7 @@ class CreateMonthUseCase {
     userId: number,
     salary: number,
     categories: { name: string; spendingLimit: number }[],
-  ): Promise<{ month: Month; categories: Category[] }> {
+  ): Promise< Month > {
     const today = new Date();
 
     const month = today.getMonth() + 1;
@@ -39,16 +38,26 @@ class CreateMonthUseCase {
       };
     }
 
-    const monthEntity = new Month(userId, year, month, salary);
-    const newMonth = await this.monthRepository.createMonth(monthEntity);
-    const categoriesEntity = categories.map(
-      (c) => new Category(newMonth.getId(), c.name, c.spendingLimit),
+    const totalAllocatedLimit = categories.reduce(
+      (sum, category) => sum + category.spendingLimit,
+      0,
     );
 
-    const newCategories =
-      await this.categoryRepository.createManyCategories(categoriesEntity);
+    if (totalAllocatedLimit > salary) {
+      throw <UseCaseError>{
+        message: "Total allocated limit exceeds the monthly salary",
+        errorType: "MONTHLY_LIMIT_EXCEEDED",
+      };
+    }
 
-    return { month: newMonth, categories: newCategories };
+    const monthEntity = new Month(userId, year, month, salary);
+
+    const newMonth = await this.monthRepository.createMonthWithCategories(
+      monthEntity,
+      categories,
+    );
+
+    return newMonth;
   }
 }
 

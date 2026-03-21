@@ -14,9 +14,15 @@ import GetCategoriesController from "./controllers/GetCategoriesController";
 
 import GetCategoriesWithExpensesUseCase from "./use-cases/GetCategoriesWithExpensesUseCase";
 import GetCategoriesWithExpensesController from "./controllers/GetCategoriesWithExpensesController";
-const categoryRepository = new CategoryRepository();
+import MonthRepository from "../../repository/MonthRepository";
 
-const createCategoryUseCase = new CreateCategoryUseCase(categoryRepository);
+const categoryRepository = new CategoryRepository();
+const monthRepository = new MonthRepository();
+
+const createCategoryUseCase = new CreateCategoryUseCase(
+  categoryRepository,
+  monthRepository,
+);
 export const createCategoryController = new CreateCategoryController(
   createCategoryUseCase,
 );
@@ -26,7 +32,10 @@ export const deleteCategoryController = new DeleteCategoryController(
   deleteCategoryUseCase,
 );
 
-const updateCategoryUseCase = new UpdateCategoryUseCase(categoryRepository);
+const updateCategoryUseCase = new UpdateCategoryUseCase(
+  categoryRepository,
+  monthRepository,
+);
 export const updateCategoryController = new UpdateCategoryController(
   updateCategoryUseCase,
 );

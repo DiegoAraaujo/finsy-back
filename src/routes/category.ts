@@ -24,7 +24,7 @@ const categoriesRoutes = async (router: FastifyInstance) => {
   );
 
   router.post<{ Body: CreateCategoryDTO; Params: { monthId: string } }>(
-    "/:monthId",
+    "/",
     { preHandler: [auth] },
     (req, reply) => createCategoryController.execute(req, reply),
   );

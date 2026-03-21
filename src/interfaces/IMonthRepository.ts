@@ -1,7 +1,11 @@
+import Category from "../entities/Category";
 import Month from "../entities/Month";
 
 export interface IMonthRepository {
-  createMonth(month: Month): Promise<Month>;
+  createMonthWithCategories(
+    month: Month,
+    categories: { name: string; spendingLimit: number }[],
+  ): Promise<Month>;
   findCurrentMonth(
     userId: number,
     month: number,

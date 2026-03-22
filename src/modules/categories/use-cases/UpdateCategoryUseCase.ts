@@ -23,7 +23,7 @@ class UpdateCategoryUseCase {
       spendingLimit?: number;
     },
   ): Promise<Category> {
-    if (!updates.name && !updates.spendingLimit) {
+    if (updates.name === undefined && updates.spendingLimit === undefined) {
       throw <UseCaseError>{
         message: "There is no data to update",
         errorType: "VALIDATION_ERROR",
@@ -40,7 +40,8 @@ class UpdateCategoryUseCase {
 
     if (!currentMonth) {
       throw <UseCaseError>{
-        message: "You haven't created a month yet. Cannot add a category.",
+        message:
+          "No month found for the current period. Cannot update category.",
         errorType: "MONTH_NOT_FOUND",
       };
     }
@@ -55,7 +56,13 @@ class UpdateCategoryUseCase {
       };
     }
 
-    if (updates.name) {
+    if (updates.name !== undefined) {
+      if (!updates.name.trim()) {
+        throw <UseCaseError>{
+          message: "Name cannot be empty",
+          errorType: "VALIDATION_ERROR",
+        };
+      }
       const existingCategoryWithName =
         await this.categoryRepository.findCategoryByName(
           updates.name,
@@ -73,10 +80,41 @@ class UpdateCategoryUseCase {
       }
     }
 
+    if (updates.spendingLimit !== undefined) {
+      if (updates.spendingLimit <= 0) {
+        throw <UseCaseError>{
+          message: "Spending limit must be greater than 0",
+          errorType: "VALIDATION_ERROR",
+        };
+      }
+
+      const existingCategories =
+        await this.categoryRepository.findCategoriesByMonthId(
+          currentMonth.getId(),
+        );
+      const totalAllocatedLimit = existingCategories.reduce(
+        (acc, c) => c.getSpendingLimit() + acc,
+        0,
+      );
+
+      const oldLimit = existingCategory.getSpendingLimit();
+
+      const newTotalAllocatedLimit =
+        totalAllocatedLimit - oldLimit + updates.spendingLimit;
+      const monthlySalary = currentMonth.getSalary();
+
+      if (newTotalAllocatedLimit > monthlySalary) {
+        throw <UseCaseError>{
+          message: "Total category limits exceed the monthly salary",
+          errorType: "MONTHLY_LIMIT_EXCEEDED",
+        };
+      }
+    }
+
     const dataToUpdate: Partial<{ name?: string; spendingLimit?: number }> = {};
 
-    if (updates.name) dataToUpdate.name = updates.name;
-    if (updates.spendingLimit)
+    if (updates.name !== undefined) dataToUpdate.name = updates.name;
+    if (updates.spendingLimit !== undefined)
       dataToUpdate.spendingLimit = updates.spendingLimit;
 
     const updatedCategory = await this.categoryRepository.updateCategory(

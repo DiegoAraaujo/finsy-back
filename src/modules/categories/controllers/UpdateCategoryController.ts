@@ -58,6 +58,7 @@ class UpdateCategoryController {
           case "VALIDATION_ERROR":
           case "MONTH_NOT_FOUND":
           case "CATEGORY_ALREADY_EXISTS":
+          case "MONTHLY_LIMIT_EXCEEDED":
             return reply.status(400).send({
               message: error.message,
               details: error.details,

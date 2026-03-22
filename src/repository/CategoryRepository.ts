@@ -37,7 +37,7 @@ class CategoryRepository implements ICategoryRepository {
     },
   ): Promise<Category> {
     const updated = await prisma.category.update({
-      where: { id: categoryId, deletedAt: null },
+      where: { id: categoryId },
       data: { ...updates },
     });
 
@@ -108,7 +108,9 @@ class CategoryRepository implements ICategoryRepository {
   }
 
   async findCategoriesByMonthId(monthId: number) {
-    const categories = await prisma.category.findMany({ where: { monthId } });
+    const categories = await prisma.category.findMany({
+      where: { monthId, deletedAt: null },
+    });
     return categories.map((c) => {
       return new Category(c.monthId, c.name, c.spendingLimit.toNumber(), c.id);
     });
@@ -116,7 +118,7 @@ class CategoryRepository implements ICategoryRepository {
 
   async findCategoriesWithTotalExpensesByMonth(monthId: number) {
     const categories = await prisma.category.findMany({
-      where: { monthId },
+      where: { monthId, deletedAt: null },
       select: {
         id: true,
         name: true,
@@ -126,6 +128,7 @@ class CategoryRepository implements ICategoryRepository {
           select: { expenses: true },
         },
         expenses: {
+          where: { deletedAt: null },
           select: {
             amount: true,
           },

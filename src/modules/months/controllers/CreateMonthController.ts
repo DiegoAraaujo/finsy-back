@@ -47,6 +47,10 @@ class CreateMonthController {
       if ("errorType" in error) {
         switch (error.errorType) {
           case "MONTH_ALREADY_EXISTS":
+            return reply.status(409).send({
+              message: error.message,
+              details: error.details,
+            });
           case "MONTHLY_LIMIT_EXCEEDED":
             return reply.status(400).send({
               message: error.message,

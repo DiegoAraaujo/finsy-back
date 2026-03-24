@@ -15,6 +15,8 @@ import GetCategoriesController from "./controllers/GetCategoriesController";
 import GetCategoriesWithExpensesUseCase from "./use-cases/GetCategoriesWithExpensesUseCase";
 import GetCategoriesWithExpensesController from "./controllers/GetCategoriesWithExpensesController";
 import MonthRepository from "../../repository/MonthRepository";
+import GetCategoryByIdUseCase from "./use-cases/GetCategoryByIdUseCase";
+import GetCategoryByIdController from "./controllers/GetCategoryByIdController";
 
 const categoryRepository = new CategoryRepository();
 const monthRepository = new MonthRepository();
@@ -50,3 +52,8 @@ const getCategoriesWithExpensesUseCase = new GetCategoriesWithExpensesUseCase(
 );
 export const getCategoriesWithExpensesController =
   new GetCategoriesWithExpensesController(getCategoriesWithExpensesUseCase);
+
+const getCategoryByIdUseCase = new GetCategoryByIdUseCase(categoryRepository);
+export const getCategoryByIdController = new GetCategoryByIdController(
+  getCategoryByIdUseCase,
+);

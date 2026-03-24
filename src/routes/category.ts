@@ -5,14 +5,21 @@ import {
   updateCategoryController,
   getCategoriesController,
   getCategoriesWithExpensesController,
+  getCategoryByIdController,
 } from "../modules/categories";
 import auth from "../middleware/auth";
 import { CreateCategoryDTO } from "../modules/categories/dtos/CreateCategoryDTO";
 import { UpdateCategoryDTO } from "../modules/categories/dtos/UpdateCategoryDTO";
 
 const categoriesRoutes = async (router: FastifyInstance) => {
+  router.get<{ Params: { categoryId: string } }>(
+    "/:categoryId",
+    { preHandler: [auth] },
+    (req, reply) => getCategoryByIdController.execute(req, reply),
+  );
+
   router.get<{ Params: { monthId: string } }>(
-    "/:monthId",
+    "/by-month/:monthId",
     { preHandler: [auth] },
     (req, reply) => getCategoriesController.execute(req, reply),
   );

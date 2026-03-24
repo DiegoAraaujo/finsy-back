@@ -27,7 +27,7 @@ class GetCategoriesWithExpensesController {
         await this.getCategoriesWithExpensesUseCase.execute(monthId);
       return reply
         .status(200)
-        .send({ categories: categoriesWithTotalExpenses });
+        .send({categoriesWithTotalExpenses });
     } catch (error) {
       return reply.status(500).send({ message: "Internal server error" });
     }

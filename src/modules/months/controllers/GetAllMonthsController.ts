@@ -14,9 +14,7 @@ class GetAllMonthsController {
 
     try {
       const months = await this.getAllMonthsUseCase.execute(userId);
-      return reply
-        .status(200)
-        .send({ months: months.map((m) => monthMapper(m)) });
+      return reply.status(200).send(months.map((m) => monthMapper(m)));
     } catch (error: any) {
       return reply.status(500).send({ message: "Internal server error" });
     }

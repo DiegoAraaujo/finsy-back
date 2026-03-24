@@ -50,7 +50,7 @@ class UpdateExpenseController {
         updates,
       );
 
-      return reply.status(201).send({ expense });
+      return reply.status(201).send(expense);
     } catch (error: any) {
       if ("errorType" in error) {
         switch (error.errorType) {

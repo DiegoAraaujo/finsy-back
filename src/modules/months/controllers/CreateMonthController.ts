@@ -40,9 +40,7 @@ class CreateMonthController {
         salary,
         validation.data,
       );
-      return reply.status(201).send({
-        month: monthMapper(month),
-      });
+      return reply.status(201).send(monthMapper(month));
     } catch (error: any) {
       if ("errorType" in error) {
         switch (error.errorType) {

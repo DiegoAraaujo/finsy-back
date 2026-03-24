@@ -1,6 +1,7 @@
 import Category from "../../../entities/Category";
 import Month from "../../../entities/Month";
 import { ICategoryRepository } from "../../../interfaces/ICategoryRepository";
+import { ICategoryWithTotalExpenses } from "../../../interfaces/ICategoryWithTotalExpenses";
 import { IMonthRepository } from "../../../interfaces/IMonthRepository";
 import UseCaseError from "../../../interfaces/UseCaseError";
 
@@ -18,7 +19,7 @@ class GetCurrentMonthUseCase {
 
   async execute(
     userId: number,
-  ): Promise<{ month: Month; categories: Category[] }> {
+  ): Promise<{ month: Month; categories: ICategoryWithTotalExpenses[] }> {
     const today = new Date();
 
     const month = today.getMonth() + 1;
@@ -37,9 +38,10 @@ class GetCurrentMonthUseCase {
       };
     }
 
-    const categories = await this.categoryRepository.findCategoriesByMonthId(
-      currentMonth.getId(),
-    );
+    const categories =
+      await this.categoryRepository.findCategoriesWithTotalExpensesByMonth(
+        currentMonth.getId(),
+      );
 
     return { month: currentMonth, categories };
   }

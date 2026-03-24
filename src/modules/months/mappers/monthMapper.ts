@@ -1,5 +1,4 @@
 import Month from "../../../entities/Month";
-import User from "../../../entities/Month";
 
 export const monthMapper = (month: Month) => {
   return {

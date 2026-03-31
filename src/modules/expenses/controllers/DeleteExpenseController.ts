@@ -22,11 +22,11 @@ class DeleteExpenseController {
 
     try {
       await this.deleteExpenseUseCase.execute(expenseId);
-      return reply.status(201).send({ success: true });
+      return reply.status(200).send({ success: true });
     } catch (error: any) {
       if ("errorType" in error) {
         if (error.errorType === "EXPENSE_NOT_FOUND") {
-          return reply.status(400).send({
+          return reply.status(404).send({
             message: error.message,
             details: error.details,
           });

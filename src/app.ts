@@ -31,8 +31,10 @@ const app = fastify();
 
 app.register(fastifyCors, {
   origin: "http://localhost:5173",
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // Adicione todos que for usar
   credentials: true,
 });
+
 app.register(fastifyCookie);
 
 app.register(fastifyJwt, {

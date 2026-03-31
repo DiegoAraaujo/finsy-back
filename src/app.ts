@@ -33,18 +33,14 @@ app.register(fastifyCors, {
   origin: "http://localhost:5173",
   credentials: true,
 });
-
-app.register(fastifyJwt, {
-  secret: process.env.JWT_ACCESS_SECRET as string,
-});
-
 app.register(fastifyCookie);
 
 app.register(fastifyJwt, {
-  secret: process.env.JWT_REFRESH_SECRET as string,
-  namespace: "refresh",
-  jwtVerify: "refreshJwtVerify",
-  jwtSign: "refreshJwtSign",
+  secret: process.env.JWT_SECRET as string,
+  cookie: {
+    cookieName: "finsy_refreshToken",
+    signed: false,
+  },
 });
 
 app.register(usersRoutes, { prefix: "/api/users" });

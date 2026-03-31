@@ -28,18 +28,19 @@ class LoginController {
       const user = await this.loginUseCase.execute(email, password);
 
       const accessToken = await reply.jwtSign(
-        { userId: user.getId() },
+        { userId: user.getId(), type: "access" },
         { expiresIn: "5m" },
       );
-      const refreshToken = await reply.refreshJwtSign(
-        { userId: user.getId() },
+      const refreshToken = await reply.jwtSign(
+        { userId: user.getId(), type: "refresh" },
         { expiresIn: "7d" },
       );
 
       reply.setCookie("finsy_refreshToken", refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
+        sameSite: "lax",
+        path: "/",
         maxAge: 60 * 60 * 24 * 7,
       });
 

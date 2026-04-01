@@ -61,6 +61,7 @@ class UpdateExpenseController {
         switch (error.errorType) {
           case "VALIDATION_ERROR":
           case "EXPENSE_NOT_FOUND":
+          case "INVALID_EXPENSE_DATE":
             return reply.status(400).send({
               message: error.message,
               details: error.details,

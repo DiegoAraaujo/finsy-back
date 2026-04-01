@@ -41,6 +41,31 @@ class UpdateExpenseUseCase {
       };
     }
 
+    if (updates.createdAt) {
+      const today = new Date();
+      const expenseDate = updates.createdAt;
+
+      const currentMonth = today.getMonth() + 1;
+      const currentYear = today.getFullYear();
+
+      const updateMonth = expenseDate.getMonth() + 1;
+      const updateYear = expenseDate.getFullYear();
+
+      if (updateMonth !== currentMonth || updateYear !== currentYear) {
+        throw <UseCaseError>{
+          message: "The expense date must belong to the current month.",
+          errorType: "INVALID_EXPENSE_DATE",
+        };
+      }
+
+      if (expenseDate > today) {
+        throw <UseCaseError>{
+          message: "Future dates are not allowed for expense records.",
+          errorType: "INVALID_EXPENSE_DATE",
+        };
+      }
+    }
+
     const dataToUpdate: Partial<{
       amount?: number;
       paymentMethod?: PaymentMethod;

@@ -60,6 +60,12 @@ class CreateExpenseController {
             details: error.details,
           });
         }
+        if (error.errorType === "INVALID_EXPENSE_DATE") {
+          return reply.status(400).send({
+            message: error.message,
+            details: error.details,
+          });
+        }
       }
 
       return reply.status(500).send({ message: "internal server error" });

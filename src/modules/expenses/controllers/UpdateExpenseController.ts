@@ -23,7 +23,7 @@ class UpdateExpenseController {
     if (isNaN(expenseId)) {
       return reply.status(400).send({ message: "Invalid expenseId" });
     }
-    const { amount, paymentMethod, description } = request.body;
+    const { amount, paymentMethod, description, createdAt } = request.body;
 
     if (
       paymentMethod &&
@@ -32,7 +32,11 @@ class UpdateExpenseController {
       return reply.status(400).send({ message: "Invalid payment method" });
     }
 
-    const validation = updateExpenseSchema.safeParse({ amount, description });
+    const validation = updateExpenseSchema.safeParse({
+      amount,
+      description,
+      createdAt,
+    });
 
     if (!validation.success) {
       return reply
@@ -44,6 +48,7 @@ class UpdateExpenseController {
         amount: validation.data.amount,
         paymentMethod,
         description: validation.data.description,
+        createdAt: validation.data.createdAt,
       };
       const expense = await this.updateExpenseUseCase.execute(
         expenseId,

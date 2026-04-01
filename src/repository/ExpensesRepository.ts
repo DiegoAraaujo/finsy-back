@@ -15,6 +15,7 @@ class ExpenseRepository implements IExpenseRepository {
       expenseCreated.amount.toNumber(),
       expenseCreated.paymentMethod,
       expenseCreated.description,
+      expenseCreated.createdAt,
       expenseCreated.id,
     );
   }
@@ -32,6 +33,7 @@ class ExpenseRepository implements IExpenseRepository {
           e.amount.toNumber(),
           e.paymentMethod,
           e.description,
+          e.createdAt,
           e.id,
         ),
     );
@@ -56,6 +58,7 @@ class ExpenseRepository implements IExpenseRepository {
       expense.amount.toNumber(),
       expense.paymentMethod,
       expense.description,
+      expense.createdAt,
       expense.id,
     );
   }
@@ -73,6 +76,7 @@ class ExpenseRepository implements IExpenseRepository {
           e.amount.toNumber(),
           e.paymentMethod,
           e.description,
+          e.createdAt,
           e.id,
         ),
     );
@@ -90,6 +94,7 @@ class ExpenseRepository implements IExpenseRepository {
           expense.amount.toNumber(),
           expense.paymentMethod,
           expense.description,
+          expense.createdAt,
           expense.id,
         )
       : null;

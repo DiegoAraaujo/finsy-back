@@ -24,13 +24,17 @@ class CreateExpenseController {
     if (isNaN(categoryId)) {
       return reply.status(400).send({ message: "Invalid categoryId" });
     }
-    const { amount, paymentMethod, description } = request.body;
+    const { amount, paymentMethod, description, createdAt } = request.body;
 
     if (!Object.values(PaymentMethod).includes(paymentMethod)) {
       return reply.status(400).send({ message: "Invalid payment method" });
     }
 
-    const validation = createExpenseSchema.safeParse({ amount, description });
+    const validation = createExpenseSchema.safeParse({
+      amount,
+      description,
+      createdAt,
+    });
 
     if (!validation.success) {
       return reply
@@ -44,6 +48,7 @@ class CreateExpenseController {
         validation.data.amount,
         paymentMethod,
         validation.data.description,
+        validation.data.createdAt,
       );
 
       return reply.status(201).send(expense);

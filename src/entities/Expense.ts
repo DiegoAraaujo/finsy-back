@@ -7,6 +7,7 @@ class Expense {
   private amount: number;
   private paymentMethod: PaymentMethod;
   private description: string | null;
+  private createdAt?: Date;
 
   constructor(
     monthId: number,
@@ -14,6 +15,7 @@ class Expense {
     amount: number,
     paymentMethod: PaymentMethod,
     description: string | null,
+    createdAt?: Date,
     id?: number,
   ) {
     this.categoryId = categoryId;
@@ -22,6 +24,7 @@ class Expense {
     this.amount = amount;
     this.paymentMethod = paymentMethod;
     this.description = description;
+    this.createdAt = createdAt;
   }
 
   getId() {
@@ -46,7 +49,11 @@ class Expense {
   getPaymentMethod() {
     return this.paymentMethod;
   }
-  
+
+  getCreatedAt() {
+    return this.createdAt;
+  }
+
   toPersistence() {
     return {
       amount: this.amount,
@@ -54,6 +61,7 @@ class Expense {
       categoryId: this.categoryId,
       monthId: this.monthId,
       paymentMethod: this.paymentMethod,
+      createdAt: this.createdAt,
     };
   }
 }

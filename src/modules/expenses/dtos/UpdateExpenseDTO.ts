@@ -4,4 +4,5 @@ export interface updateExpenseDTO {
   amount?: number;
   paymentMethod?: PaymentMethod;
   description?: string;
+  createdAt?: Date;
 }

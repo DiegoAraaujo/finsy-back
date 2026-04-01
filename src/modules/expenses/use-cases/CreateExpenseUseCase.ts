@@ -45,6 +45,7 @@ class CreateExpenseUseCase {
       amount,
       paymentMethod,
       description,
+      createdAtAt,
     );
 
     const expense = await this.expenseRepository.createExpense(expenseEntity);

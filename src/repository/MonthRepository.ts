@@ -80,6 +80,22 @@ class MonthRepository implements IMonthRepository {
       : null;
   }
 
+  async findMonthById(monthId: number) {
+    const month = await prisma.month.findUnique({
+      where: { id: monthId },
+    });
+
+    return month
+      ? new Month(
+          month.userId,
+          month.year,
+          month.month,
+          month.salary.toNumber(),
+          month.id,
+        )
+      : null;
+  }
+
   async existsMonth(userId: number, month: number, year: number) {
     const existingMonth = await prisma.month.findUnique({
       where: {

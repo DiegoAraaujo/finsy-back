@@ -12,6 +12,8 @@ import GetCurrentMonthController from "./controllers/GetCurrentMonthController";
 import GetLatestMonthUseCase from "./use-cases/GetLatestMonthUseCase";
 import GetLatestMonthController from "./controllers/GetLatestMonthController";
 import CategoryRepository from "../../repository/CategoryRepository";
+import GetMonthByIdController from "./controllers/GetMonthByIdController";
+import GetMonthByIdUseCase from "./use-cases/GetMonthByIdUseCase";
 
 const monthRepository = new MonthRepository();
 const categoryRepository = new CategoryRepository();
@@ -43,4 +45,9 @@ const getLatestMonthUseCase = new GetLatestMonthUseCase(
 );
 export const getLatestMonthController = new GetLatestMonthController(
   getLatestMonthUseCase,
+);
+
+ const getMonthByIdUseCase = new GetMonthByIdUseCase(monthRepository);
+export const getMonthByIdController = new GetMonthByIdController(
+  getMonthByIdUseCase,
 );

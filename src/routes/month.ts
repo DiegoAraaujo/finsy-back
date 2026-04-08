@@ -6,6 +6,7 @@ import {
   getAllMonthsController,
   getCurrentMonthController,
   getLatestMonthController,
+  getMonthByIdController,
 } from "../modules/months";
 import { CreateCategoryDTO } from "../modules/categories/dtos/CreateCategoryDTO";
 
@@ -18,6 +19,12 @@ const MonthsRoutes = async (router: FastifyInstance) => {
 
   router.get("/", { preHandler: [auth] }, (req, reply) =>
     getAllMonthsController.execute(req, reply),
+  );
+
+  router.get<{
+    Params: { id: string };
+  }>("/:id", { preHandler: [auth] }, (req, reply) =>
+    getMonthByIdController.execute(req, reply),
   );
 
   router.get("/current", { preHandler: [auth] }, (req, reply) =>

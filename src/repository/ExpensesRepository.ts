@@ -82,6 +82,37 @@ class ExpenseRepository implements IExpenseRepository {
     );
   }
 
+  async getTotalExpensesByMonth(monthId: number): Promise<number> {
+    const result = await prisma.expense.aggregate({
+      where: {
+        monthId,
+        deletedAt: null,
+      },
+      _sum: {
+        amount: true,
+      },
+    });
+
+    return result._sum.amount?.toNumber() ?? 0;
+  }
+  
+  async getExpensesGroupedByPaymentMethod(monthId: number) {
+    const result = await prisma.expense.groupBy({
+      by: ["paymentMethod"],
+      where: {
+        monthId,
+        deletedAt: null,
+      },
+      _sum: {
+        amount: true,
+      },
+    });
+
+    return result.map((item) => ({
+      paymentMethod: item.paymentMethod,
+      total: item._sum.amount?.toNumber() ?? 0,
+    }));
+  }
   async findExpenseById(expenseId: number) {
     const expense = await prisma.expense.findFirst({
       where: { id: expenseId, deletedAt: null },

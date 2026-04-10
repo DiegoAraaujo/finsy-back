@@ -14,5 +14,13 @@ export interface IExpenseRepository {
   findExpensesByMonthId(monthId: number): Promise<Expense[]>;
   findExpenseById(expenseId: number): Promise<Expense | null>;
   findExpensesByCategoryId(categoryId: number): Promise<Expense[]>;
+  getTotalExpensesByMonth(monthId: number): Promise<number>;
+
+  getExpensesGroupedByPaymentMethod(monthId: number): Promise<
+    {
+      paymentMethod: PaymentMethod;
+      total: number;
+    }[]
+  >;
   deleteExpense(ExpenseId: number): Promise<void>;
 }

@@ -10,6 +10,7 @@ import usersRoutes from "./routes/user";
 import categoriesRoutes from "./routes/category";
 import MonthsRoutes from "./routes/month";
 import expensesRoutes from "./routes/expense";
+import dashboardRoutes from "./routes/dashboard";
 
 const app = fastify();
 
@@ -31,7 +32,7 @@ const app = fastify();
 
 app.register(fastifyCors, {
   origin: "http://localhost:5173",
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // Adicione todos que for usar
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], 
   credentials: true,
 });
 
@@ -49,5 +50,6 @@ app.register(usersRoutes, { prefix: "/api/users" });
 app.register(categoriesRoutes, { prefix: "/api/categories" });
 app.register(MonthsRoutes, { prefix: "/api/months" });
 app.register(expensesRoutes, { prefix: "/api/expenses" });
+app.register(dashboardRoutes, { prefix: "/api/dashboard" });
 
 export default app;

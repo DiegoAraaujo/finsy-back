@@ -11,6 +11,11 @@ export interface IMonthRepository {
     year: number,
   ): Promise<Month | null>;
   findAllMonths(userid: number): Promise<Month[]>;
+  findPreviousMonth(
+    userId: number,
+    month: number,
+    year: number,
+  ): Promise<Month | null>;
   findMonthById(monthId: number): Promise<Month | null>;
   findLatestMonth(userId: number): Promise<Month | null>;
   existsMonth(userId: number, month: number, year: number): Promise<boolean>;

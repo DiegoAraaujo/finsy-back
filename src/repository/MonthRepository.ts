@@ -30,6 +30,31 @@ class MonthRepository implements IMonthRepository {
     });
   }
 
+  async findPreviousMonth(userId: number, month: number, year: number) {
+    const prevMonth = month === 1 ? 12 : month - 1;
+    const prevYear = month === 1 ? year - 1 : year;
+
+    const monthFound = await prisma.month.findUnique({
+      where: {
+        userId_month_year: {
+          userId,
+          month: prevMonth,
+          year: prevYear,
+        },
+      },
+    });
+
+    return monthFound
+      ? new Month(
+          monthFound.userId,
+          monthFound.year,
+          monthFound.month,
+          monthFound.salary.toNumber(),
+          monthFound.id,
+        )
+      : null;
+  }
+  
   async findCurrentMonth(userId: number, month: number, year: number) {
     const currentMonth = await prisma.month.findUnique({
       where: {

@@ -31,7 +31,24 @@ class CreateUserController {
         email,
         password,
       );
-      return reply.status(201).send(userMapper(newUser));
+      const accessToken = await reply.jwtSign(
+        { userId: newUser.getId(), type: "access" },
+        { expiresIn: "5m" },
+      );
+      const refreshToken = await reply.jwtSign(
+        { userId: newUser.getId(), type: "refresh" },
+        { expiresIn: "7d" },
+      );
+
+      reply.setCookie("finsy_refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+      });
+
+      return reply.status(201).send({ user: userMapper(newUser), accessToken });
     } catch (error: any) {
       if ("errorType" in error) {
         if (error.errorType === "EMAIL_DUPLICATED") {

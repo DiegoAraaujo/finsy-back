@@ -2,7 +2,6 @@ import User from "../../../entities/User";
 import { IUserRepository } from "../../../interfaces/IUserRepository";
 import UseCaseError from "../../../interfaces/UseCaseError";
 import { compareHash } from "../../../utils/hash";
-import { loginSchema } from "../../../validators/userValidator";
 
 class LoginUseCase {
   private userRepository: IUserRepository;

@@ -26,7 +26,7 @@ class Month {
     return this.id;
   }
   getUserId() {
-    return this.id;
+    return this.userId;
   }
   getMonth() {
     return this.month;

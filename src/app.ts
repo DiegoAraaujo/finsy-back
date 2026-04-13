@@ -32,7 +32,7 @@ const app = fastify();
 
 app.register(fastifyCors, {
   origin: "http://localhost:5173",
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], 
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   credentials: true,
 });
 
@@ -51,5 +51,10 @@ app.register(categoriesRoutes, { prefix: "/api/categories" });
 app.register(MonthsRoutes, { prefix: "/api/months" });
 app.register(expensesRoutes, { prefix: "/api/expenses" });
 app.register(dashboardRoutes, { prefix: "/api/dashboard" });
+
+app.get("/health", async (request, reply) => {
+  return reply.status(200).send("ok");
+});
+
 
 export default app;

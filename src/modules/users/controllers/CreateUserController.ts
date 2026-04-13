@@ -43,7 +43,7 @@ class CreateUserController {
       reply.setCookie("finsy_refreshToken", refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
+        sameSite: "none",
         path: "/",
         maxAge: 60 * 60 * 24 * 7,
       });

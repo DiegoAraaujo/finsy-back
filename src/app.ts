@@ -30,8 +30,13 @@ const app = fastify();
   });
 })();
 
+const allowedOrigins =
+  process.env.NODE_ENV === "production"
+    ? ["https://finsy-one.vercel.app"]
+    : ["http://localhost:5173"];
+
 app.register(fastifyCors, {
-  origin: "http://localhost:5173",
+  origin: allowedOrigins,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   credentials: true,
 });
@@ -55,6 +60,5 @@ app.register(dashboardRoutes, { prefix: "/api/dashboard" });
 app.get("/health", async (request, reply) => {
   return reply.status(200).send("ok");
 });
-
 
 export default app;

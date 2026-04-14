@@ -30,10 +30,10 @@ const app = fastify();
   });
 })();
 
-const allowedOrigins =
-  process.env.NODE_ENV === "production"
-    ? ["https://finsy-one.vercel.app"]
-    : ["http://localhost:5173"];
+const allowedOrigins = [
+  "https://finsy-one.vercel.app",
+  "http://localhost:5173",
+];
 
 app.register(fastifyCors, {
   origin: allowedOrigins,

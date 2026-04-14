@@ -14,7 +14,12 @@ import dashboardRoutes from "./routes/dashboard";
 
 const app = fastify();
 
-(async () => {
+const allowedOrigins = [
+  "https://finsy-one.vercel.app",
+  "http://localhost:5173",
+];
+
+const bootstrap = async () => {
   await app.register(swagger, {
     openapi: {
       info: {
@@ -28,37 +33,35 @@ const app = fastify();
   await app.register(swaggerUI, {
     routePrefix: "/docs",
   });
-})();
 
-const allowedOrigins = [
-  "https://finsy-one.vercel.app",
-  "http://localhost:5173",
-];
+  await app.register(fastifyCors, {
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    credentials: true,
+    exposedHeaders: ["set-cookie"],
+  });
 
-app.register(fastifyCors, {
-  origin: allowedOrigins,
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  credentials: true,
-});
+  await app.register(fastifyCookie);
 
-app.register(fastifyCookie);
+  await app.register(fastifyJwt, {
+    secret: process.env.JWT_SECRET as string,
+    cookie: {
+      cookieName: "finsy_refreshToken",
+      signed: false,
+    },
+  });
 
-app.register(fastifyJwt, {
-  secret: process.env.JWT_SECRET as string,
-  cookie: {
-    cookieName: "finsy_refreshToken",
-    signed: false,
-  },
-});
+  app.register(usersRoutes, { prefix: "/api/users" });
+  app.register(categoriesRoutes, { prefix: "/api/categories" });
+  app.register(MonthsRoutes, { prefix: "/api/months" });
+  app.register(expensesRoutes, { prefix: "/api/expenses" });
+  app.register(dashboardRoutes, { prefix: "/api/dashboard" });
 
-app.register(usersRoutes, { prefix: "/api/users" });
-app.register(categoriesRoutes, { prefix: "/api/categories" });
-app.register(MonthsRoutes, { prefix: "/api/months" });
-app.register(expensesRoutes, { prefix: "/api/expenses" });
-app.register(dashboardRoutes, { prefix: "/api/dashboard" });
+  app.get("/health", async (request, reply) => {
+    return reply.status(200).send("ok");
+  });
+};
 
-app.get("/health", async (request, reply) => {
-  return reply.status(200).send("ok");
-});
+bootstrap();
 
 export default app;

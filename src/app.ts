@@ -12,56 +12,53 @@ import MonthsRoutes from "./routes/month";
 import expensesRoutes from "./routes/expense";
 import dashboardRoutes from "./routes/dashboard";
 
-const app = fastify();
+const app = fastify({
+  logger: true
+});
 
 const allowedOrigins = [
   "https://finsy-one.vercel.app",
   "http://localhost:5173",
 ];
 
-const bootstrap = async () => {
-  await app.register(swagger, {
-    openapi: {
-      info: {
-        title: "Finsy API",
-        description: "API para controle financeiro",
-        version: "1.0.0",
-      },
+app.register(fastifyCors, {
+  origin: allowedOrigins,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  credentials: true,
+  exposedHeaders: ["set-cookie"],
+});
+
+app.register(fastifyCookie);
+
+app.register(fastifyJwt, {
+  secret: process.env.JWT_SECRET as string,
+  cookie: {
+    cookieName: "finsy_refreshToken",
+    signed: false,
+  },
+});
+
+app.register(swagger, {
+  openapi: {
+    info: {
+      title: "Finsy API",
+      description: "API para controle financeiro",
+      version: "1.0.0",
     },
-  });
+  },
+});
 
-  await app.register(swaggerUI, {
-    routePrefix: "/docs",
-  });
+app.register(swaggerUI, {
+  routePrefix: "/docs",
+});
+app.register(usersRoutes, { prefix: "/api/users" });
+app.register(categoriesRoutes, { prefix: "/api/categories" });
+app.register(MonthsRoutes, { prefix: "/api/months" });
+app.register(expensesRoutes, { prefix: "/api/expenses" });
+app.register(dashboardRoutes, { prefix: "/api/dashboard" });
 
-  await app.register(fastifyCors, {
-    origin: allowedOrigins,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    credentials: true,
-    exposedHeaders: ["set-cookie"],
-  });
-
-  await app.register(fastifyCookie);
-
-  await app.register(fastifyJwt, {
-    secret: process.env.JWT_SECRET as string,
-    cookie: {
-      cookieName: "finsy_refreshToken",
-      signed: false,
-    },
-  });
-
-  app.register(usersRoutes, { prefix: "/api/users" });
-  app.register(categoriesRoutes, { prefix: "/api/categories" });
-  app.register(MonthsRoutes, { prefix: "/api/months" });
-  app.register(expensesRoutes, { prefix: "/api/expenses" });
-  app.register(dashboardRoutes, { prefix: "/api/dashboard" });
-
-  app.get("/health", async (request, reply) => {
-    return reply.status(200).send("ok");
-  });
-};
-
-bootstrap();
+app.get("/health", async (request, reply) => {
+  return reply.status(200).send({ status: "ok" });
+});
 
 export default app;

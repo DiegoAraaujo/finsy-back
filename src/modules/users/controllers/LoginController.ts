@@ -36,15 +36,11 @@ class LoginController {
         { expiresIn: "7d" },
       );
 
-      reply.setCookie("finsy_refreshToken", refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "none",
-        path: "/",
-        maxAge: 60 * 60 * 24 * 7,
+      return reply.status(200).send({ 
+        user: userMapper(user), 
+        accessToken,
+        refreshToken
       });
-
-      return reply.status(200).send({ user: userMapper(user), accessToken });
     } catch (error: any) {
       if ("errorType" in error) {
         switch (error.errorType) {

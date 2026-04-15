@@ -40,15 +40,11 @@ class CreateUserController {
         { expiresIn: "7d" },
       );
 
-      reply.setCookie("finsy_refreshToken", refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "none",
-        path: "/",
-        maxAge: 60 * 60 * 24 * 7,
+      return reply.status(201).send({ 
+        user: userMapper(newUser), 
+        accessToken,
+        refreshToken
       });
-
-      return reply.status(201).send({ user: userMapper(newUser), accessToken });
     } catch (error: any) {
       if ("errorType" in error) {
         if (error.errorType === "EMAIL_DUPLICATED") {
